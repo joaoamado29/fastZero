@@ -18,3 +18,26 @@ def test_root_deve_retornar_ola_mundo():
 
     # Assert - Garanta
     assert response.json() == {'message': 'Olá mundo!!'}
+
+
+def test_page_deve_retornar_ola_mundo_html():
+    # Arrange - Arranjo
+    client = TestClient(app)
+
+    # Act - Ação
+    response = client.get('/page').text
+
+    # Assert - Garanta
+    assert (
+        response
+        == """
+    <html>
+        <head>
+            <title>Meu App</title>
+        </head>
+        <body>
+            <h1>Olá mundo!!</h1>
+        </body>
+    </html>
+    """
+    )
