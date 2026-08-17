@@ -3,7 +3,9 @@ from http import HTTPStatus
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
-from fastzero.schemas import Message, UserSchema, UserPublicSchema
+from fastzero.schemas import Message, UserDB, UserPublic, UserSchema
+
+database = []  # Simulação de um banco de dados em memória
 
 app = FastAPI()
 
@@ -28,6 +30,9 @@ def read_page():
     </html>
     """
 
-@app.post('/users/', status_code=HTTPStatus.CREATED, response_model=UserPublicSchema)
-def create_user(user: 'UserSchema'):
-    return user
+
+@app.post('/users/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
+def create_user(user: UserSchema):
+    user_with_id = UserDB(**user.model_dump(), id=len(database) + 1)
+    database.append(user_with_id)
+    return user_with_id
